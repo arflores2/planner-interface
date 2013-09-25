@@ -1,0 +1,31 @@
+
+extend layout
+
+block styles
+	link(rel="stylesheet", href="/assets/css/home.css")
+
+block scripts
+	- var _app = 'home'
+	script(src="/vendor/js/ui-bootstrap-tpls-0.6.0.js")
+	script(src="/socket.io/socket.io.js")
+
+	script(src="app/#{_app}/app.js")
+
+	//- controllers
+	script(src="app/#{_app}/HomeCtrl.js")
+	script(src="app/#{_app}/plans/PlanCtrl.js")
+
+	//- services
+	script(src="app/#{_app}/Socket.js")
+
+	//- directives
+
+block content
+	div(ng-app="home")
+		div.container-fluid(ng-controller="PlanCtrl")
+			alert(type="alert.type") {{alert.msg}}
+			div.row-fluid
+				div.span3
+					include includes/navigation
+				div.span9(ng-view)
+
