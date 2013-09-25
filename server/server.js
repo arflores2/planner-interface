@@ -12,7 +12,7 @@ var express = require('express'),
 	io = require('socket.io'),
 	cfg = require('./config');
 
-// var mongoose = require('mongoose');
+var mongoose = require('mongoose');
 
 // /*var server = https.createServer({
 // 	key: fs.readFileSync('cert/server-key.pem'),
@@ -20,19 +20,18 @@ var express = require('express'),
 // }, app);*/
 var server = http.createServer(app);
 
-// var	Socket = require('./services/Socket.js')(server, io, Session, sessionStore, cfg.SESSION_SECRET),
-// 		Planner = require('./services/Planner.js')({}, mongoose, Socket),
-// 		UserModel = require('./models/User.js')({}, mongoose, emitter, Planner);
+var	Socket = require('./services/Socket.js')(server, io, Session, sessionStore, cfg.SESSION_SECRET),
+	Planner = require('./services/Planner.js')({}, mongoose, Socket),
+	UserModel = require('./models/User.js')({}, mongoose, emitter, Planner);
 
 var WelcomeRoutes = require('./routes/Welcome.js')(),
 	HomeRoutes = require('./routes/Home.js')();
-// 		PlanRoutes = require('./routes/Plan.js')(UserModel),
-// 		UserRoutes = require('./routes/User.js')(UserModel);
+ 	PlanRoutes = require('./routes/Plan.js')(UserModel),
+ 	UserRoutes = require('./routes/User.js')(UserModel);
 
 app.configure(function() {
 	app.set('view engine', 'jade');
 	app.set('views', __dirname + '/views');
-	console.log(express.static(cfg.PUBLIC_PATH), cfg.PUBLIC_PATH);
 	app.use(express.static(cfg.PUBLIC_PATH));
 	app.use(express.limit('1mb'));
 	app.use(express.bodyParser());
@@ -40,7 +39,7 @@ app.configure(function() {
 	app.use(express.session({
 		secret: cfg.SESSION_SECRET, store: sessionStore
 	}));
-	//mongoose.connect(cfg.MONGOOSE.CONNECT);
+	mongoose.connect(cfg.MONGOOSE.CONNECT);
 	app.use(function(err, req, res, next) {
 		console.err(err.stack);
 		res.send(500, 'Something went wrong');
@@ -59,18 +58,18 @@ function auth(req, res, next) {
 	}
 }
 
-// // landing pages
+// landing pages
 app.get('/', auth, HomeRoutes.index);
 app.get('/welcome', WelcomeRoutes.index);
 app.get('/home', auth, HomeRoutes.home);
 
-// app.post('/login', UserRoutes.login);
-// app.get('/logout', UserRoutes.logout);
-// app.post('/register', UserRoutes.register);
+app.post('/login', UserRoutes.login);
+app.get('/logout', UserRoutes.logout);
+app.post('/register', UserRoutes.register);
 
 
-// // plan pages
-// app.post('/plan', auth, PlanRoutes.add);
+// plan pages
+app.post('/plan', auth, PlanRoutes.add);
 
 console.log(cfg.HOST.PORT, cfg.HOST.IP);
 server.listen(cfg.HOST.PORT, cfg.HOST.IP);
