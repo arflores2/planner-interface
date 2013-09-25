@@ -1,8 +1,9 @@
 var config = require('./config.global');
 
-config.HOST = 'localhost/';
-
-config.PORT.HTTPS = '8443';
+config.HOST = {}
+config.HOST.PORT= process.env.PORT || 8080;
+config.HOST.IP = (process.env.IP || '0.0.0.0');
+console.log('development', process.env.PORT, config.HOST.PORT, process.env.IP, config.HOST.IP);
 
 // paths
 config.PUBLIC_PATH = __dirname + '/../../client';
@@ -20,6 +21,6 @@ config.SESSION_SECRET = 'my private secret';
 config.MONGOOSE = {};
 config.MONGOOSE.PROTOCOL = 'mongodb://';
 config.MONGOOSE.DB = 'planner-interface';
-config.MONGOOSE.CONNECT = config.MONGOOSE.PROTOCOL + config.HOST + config.MONGOOSE.DB;
+config.MONGOOSE.CONNECT = config.MONGOOSE.PROTOCOL + config.HOST.IP + '/' + config.MONGOOSE.DB;
 
 module.exports = config;

@@ -1,11 +1,12 @@
 var config = require('./config.global');
 
-config.HOST = 'localhost/';
-
-config.PORT.HTTPS = '8443';
+config.HOST = {}
+config.HOST.PORT= process.env.PORT || 8080;
+config.HOST.IP = process.env.IP || '0.0.0.0';
+console.log('production', process.env.PORT, config.HOST.PORT, process.env.IP, config.HOST.IP);
 
 // paths
-config.PUBLIC_PATH = __dirname + '/client';
+config.PUBLIC_PATH = __dirname + '/../../client';
 config.CERT_PATH = '/server/cert';
 
 //cert
@@ -19,8 +20,7 @@ config.SESSION_SECRET = 'my private secret';
 // mongoose
 config.MONGOOSE = {};
 config.MONGOOSE.PROTOCOL = 'mongodb://';
-config.MONGOOSE.DB = 'angular-registration';
-config.MONGOOSE.CONNECT = config.MONGOOSE.PROTOCOL + config.HOST + config.MONGOOSE.DB;
-console.log(config.MONGOOSE.CONNECT);
+config.MONGOOSE.DB = 'planner-interface';
+config.MONGOOSE.CONNECT = config.MONGOOSE.PROTOCOL + config.HOST.IP + '/' + config.MONGOOSE.DB;
 
 module.exports = config;

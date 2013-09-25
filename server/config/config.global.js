@@ -1,11 +1,9 @@
 var config = module.exports = {};
 
-config.HOST = 'localhost/';
-
-// ports
-config.PORT = {};
-//config.PORT.HTTP = '8080';
-config.PORT.HTTPS = '8443';
+config.HOST = {}
+config.HOST.PORT= process.env.PORT || 8080;
+config.HOST.IP = process.env.IP || '0.0.0.0';
+console.log('global', process.env.PORT, config.HOST.PORT, process.env.IP, config.HOST.IP);
 
 // paths
 config.PUBLIC_PATH = '/client';
@@ -23,4 +21,4 @@ config.SESSION_SECRET = 'my private secret';
 config.MONGOOSE = {};
 config.MONGOOSE.PROTOCOL = 'mongodb://';
 config.MONGOOSE.DB = 'angddular-registration';
-config.MONGOOSE.CONNECT = config.MONGOOSE.PROTOCOL + config.HOST + config.MONGOOSE.DB;
+config.MONGOOSE.CONNECT = config.MONGOOSE.PROTOCOL + '127.7.52.129' + '/' + config.MONGOOSE.DB;
